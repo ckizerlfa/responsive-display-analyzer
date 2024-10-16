@@ -2,4 +2,4 @@ streamlit
 pandas
 chardet
 openpyxl
-PIL
+Pillow
