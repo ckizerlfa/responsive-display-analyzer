@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from io import BytesIO
 import chardet
 import openpyxl
@@ -95,24 +97,24 @@ if files:
                     st.markdown(f"### {asset_type.title()}")
                     for index, row in filtered_df.iterrows():
                         asset_url = row['asset']
-                        asset_type = row['asset type'].lower()
+                        asset_type_lower = row['asset type'].lower()
 
                         # Create columns for each row in the table
                         col1, col2, col3, col4 = st.columns([3, 1, 1, 1])
                         with col1:
                             # Display asset preview directly inside the table cell with smaller thumbnails
-                            if asset_type in ['square image', 'landscape image', 'logo', 'landscape logo']:
+                            if asset_type_lower in ['square image', 'landscape image', 'logo', 'landscape logo']:
                                 if re.match(r'^https?://', asset_url):
                                     try:
                                         response = requests.get(asset_url)
                                         if response.status_code == 200:
                                             img = Image.open(BytesIO(response.content))
-                                            st.image(img, caption=asset_url.split('/')[-1], use_column_width=False, width=100)
+                                            st.image(img, caption=asset_url.split('/')[-1], width=100)
                                         else:
                                             st.write("Invalid Image URL")
                                     except Exception as e:
                                         st.write(f"Error loading image: {e}")
-                            elif asset_type == 'youtube video':
+                            elif asset_type_lower == 'youtube video':
                                 youtube_match = re.search(r'(?:https?://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)([\w-]+)', asset_url)
                                 if youtube_match:
                                     video_id = youtube_match.group(1)
