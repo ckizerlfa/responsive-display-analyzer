@@ -70,7 +70,7 @@ def display_asset_preview(asset_url, asset_type):
     For image types, attempt to show an image;
     for YouTube videos, embed the video;
     otherwise, if the URL looks like an image, try to load it, else show a clickable link.
-    This function is used in both the Detailed Asset View and the Actionable Recommendations.
+    This function is used in both the Detailed Asset View and the Asset Performance Highlights.
     """
     asset_type_lower = asset_type.lower()
     if asset_type_lower in ['square image', 'landscape image', 'logo', 'landscape logo']:
@@ -244,7 +244,7 @@ if uploaded_files and process_button:
 
             # -------------------------------
             # Create Performance Summary Pivot Table aggregated by Individual Assets
-            # (For the tables below: actionable recommendations, detailed asset view, and download)
+            # (For the tables below: asset performance highlights, detailed asset view, and download)
             # -------------------------------
             performance_summary_individual = filtered_df.pivot_table(
                 index=['asset', 'asset type'],
@@ -284,7 +284,7 @@ if uploaded_files and process_button:
                 st.metric(label="Low (%)", value=f"{low_pct:.1f}%")
 
             # -------------------------------
-            # Actionable Recommendations (Based on Individual Assets)
+            # Asset Performance Highlights (Based on Individual Assets)
             # -------------------------------
             recommendations_dict = {"Best": [], "Good": [], "Low": []}
             for idx, row in sorted_perf_individual.iterrows():
@@ -293,7 +293,7 @@ if uploaded_files and process_button:
                         recommendations_dict[perf].append((row, perf))
                         break
 
-            st.subheader("Actionable Recommendations")
+            st.subheader("Asset Performance Highlights")
             for perf in ["Best", "Good", "Low"]:
                 if recommendations_dict[perf]:
                     st.markdown(f"#### Majority {perf}")
@@ -315,6 +315,11 @@ if uploaded_files and process_button:
                         st.markdown("<hr>", unsafe_allow_html=True)
                 else:
                     st.info(f"No assets with majority {perf} performance.")
+
+            # -------------------------------
+            # Divider Between Sections
+            # -------------------------------
+            st.markdown("<hr style='border: 2px solid #aaa; margin: 20px 0;'>", unsafe_allow_html=True)
 
             # -------------------------------
             # Detailed Asset View (Based on Individual Assets)
